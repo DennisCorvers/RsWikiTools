@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RsWiki.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace RsWiki.Farming.StageParsers
@@ -17,7 +18,7 @@ namespace RsWiki.Farming.StageParsers
 
         public TemplateFactory(string crop, int stages, string patchType, GrowthStages supportedStages)
         {
-            Crop = crop;
+            Crop = crop.ToLower();
             Stages = stages;
             PatchType = patchType.ToLower();
             SupportedStages = supportedStages;
@@ -39,6 +40,7 @@ namespace RsWiki.Farming.StageParsers
                         var template = m_parser.GetCropInfo(state, i, Crop);
                         if (template != null)
                         {
+                            template = template.CapitaliseFirstLetter();
                             cropInfo.Add(new CropStageInfo(state, i, template));
                         }
                     }
