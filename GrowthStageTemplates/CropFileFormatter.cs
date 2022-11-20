@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace GrowthStageTemplates
@@ -24,9 +25,14 @@ namespace GrowthStageTemplates
 
             while (files.MoveNext() && crops.MoveNext())
             {
-                var fileInfo = files.Current;
-                var fileName = $"{crops.Current.CropInfo}.{m_outputFileFormat}";
-                files.Current.MoveTo(Path.Combine(fileInfo.Directory.FullName, fileName));
+                var currFile = files.Current;
+                var targetName = $"{crops.Current.CropInfo}.{m_outputFileFormat}";
+                var targetDir = Path.Combine(currFile.Directory.FullName, targetName);
+
+                if (File.Exists(targetDir))
+                    throw new InvalidOperationException($"Unable to rename file {currFile.Name}. A file with target name {targetName} already exists.");
+
+                currFile.MoveTo(targetDir);
             }
         }
     }
