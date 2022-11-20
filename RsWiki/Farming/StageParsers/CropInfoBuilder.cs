@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RsWiki.Farming.StageParsers
 {
-    public class TemplateFactory
+    public class CropInfoBuilder
     {
         public string Crop { get; }
 
@@ -16,9 +16,9 @@ namespace RsWiki.Farming.StageParsers
 
         private readonly DefaultParser m_parser;
 
-        public TemplateFactory(string crop, int stages, string patchType, GrowthStages supportedStages)
+        public CropInfoBuilder(string crop, int stages, string patchType, GrowthStages supportedStages)
         {
-            Crop = crop.ToLower();
+            Crop = crop.CapitaliseFirstLetter();
             Stages = stages;
             PatchType = patchType.ToLower();
             SupportedStages = supportedStages;
@@ -26,7 +26,7 @@ namespace RsWiki.Farming.StageParsers
             m_parser = ParserFactory.CreateParser(PatchType, stages);
         }
 
-        public ICollection<CropStageInfo> Build()
+        public IReadOnlyCollection<CropStageInfo> Build()
         {
             var stages = Enum.GetValues<GrowthStages>();
             var cropInfo = new List<CropStageInfo>();
@@ -40,7 +40,6 @@ namespace RsWiki.Farming.StageParsers
                         var template = m_parser.GetCropInfo(state, i, Crop);
                         if (template != null)
                         {
-                            template = template.CapitaliseFirstLetter();
                             cropInfo.Add(new CropStageInfo(state, i, template));
                         }
                     }
