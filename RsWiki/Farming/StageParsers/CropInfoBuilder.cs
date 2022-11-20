@@ -18,7 +18,7 @@ namespace RsWiki.Farming.StageParsers
 
         public CropInfoBuilder(string crop, int stages, string patchType, GrowthStages supportedStages)
         {
-            Crop = crop.CapitaliseFirstLetter();
+            Crop = crop.ToLower();
             Stages = stages;
             PatchType = patchType.ToLower();
             SupportedStages = supportedStages;
@@ -38,9 +38,10 @@ namespace RsWiki.Farming.StageParsers
                     if (SupportedStages.HasFlag(state))
                     {
                         var template = m_parser.GetCropInfo(state, i, Crop);
+
                         if (template != null)
                         {
-                            cropInfo.Add(new CropStageInfo(state, i, template));
+                            cropInfo.Add(new CropStageInfo(state, i, template.CapitaliseFirstLetter()));
                         }
                     }
                 }
