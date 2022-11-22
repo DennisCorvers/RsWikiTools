@@ -6,18 +6,38 @@ namespace RsWiki.Farming.StageParsers
     {
         protected int Stages { get; }
 
-        public DefaultParser(int stages)
+        protected string Crop { get; }
+
+        public DefaultParser(string crop, int stages)
         {
             Stages = stages;
+            Crop = crop;
         }
 
-        public string GetCropInfo(GrowthStages state, int stage, string crop)
+        public string GetCropInfo(GrowthStages state, int stage)
         {
             var template = GetTemplate(state, stage);
             if (template == null)
                 return null;
 
-            return string.Format(template, crop, stage);
+            return string.Format(template, Crop, stage);
+        }
+
+        /// <summary>
+        /// Mutates a general growth state to a specific one.
+        /// Ie. the highest stage of "healthy" to "grown"
+        /// </summary>
+        public virtual GrowthStages MutateState(GrowthStages state, int stage)
+        {
+            switch (state)
+            {
+                case GrowthStages.Healthy:
+                    if (stage == Stages)
+                        return GrowthStages.Grown;
+                    break;
+            }
+
+            return state;
         }
 
         private string GetTemplate(GrowthStages state, int stage)
@@ -47,25 +67,15 @@ namespace RsWiki.Farming.StageParsers
 
         protected virtual string GetConcreteTemplate(GrowthStages state, int stage)
         {
-            switch (state)
+            return state switch
             {
-                case GrowthStages.Healthy:
-                    return stage == Stages
-                        ? "{0} (grown)"
-                        : "{0} (stage {1})";
-                case GrowthStages.Watered:
-                    return "{0} (watered, stage {1})";
-                case GrowthStages.Diseased:
-                    return "Diseased {0} (stage {1})";
-                case GrowthStages.Dead:
-                    return "Dead {0} (stage {1})";
-                case GrowthStages.Grown:
-                    return "{0} (grown)";
-                default:
-                    break;
-            }
-
-            return null;
+                GrowthStages.Healthy => "{0} (stage {1})",
+                GrowthStages.Watered => "{0} (watered, stage {1})",
+                GrowthStages.Diseased => "Diseased {0} (stage {1})",
+                GrowthStages.Dead => "Dead {0} (stage {1})",
+                GrowthStages.Grown => "{0} (grown)",
+                _ => null,
+            };
         }
     }
 }

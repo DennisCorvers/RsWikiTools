@@ -2,9 +2,10 @@
 {
     internal class NonWaterParser : DefaultParser
     {
-        public NonWaterParser(int stages)
-            : base(stages)
-        { }
+        public NonWaterParser(string crop, int stages) 
+            : base(crop, stages)
+        {
+        }
 
         protected override bool StageExists(GrowthStages state, int stage)
         {

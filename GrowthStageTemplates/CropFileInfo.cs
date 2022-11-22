@@ -9,9 +9,9 @@ namespace GrowthStageTemplates
 
         public string CropName { get; }
 
-        public IReadOnlyCollection<CropStageInfo> CropStages { get; }
+        public CropStageCollection CropStages { get; }
 
-        public CropFileInfo(string imageFormat, string cropName, IReadOnlyCollection<CropStageInfo> cropStages)
+        public CropFileInfo(string imageFormat, string cropName, CropStageCollection cropStages)
         {
             ImageFormat = imageFormat;
             CropName = cropName;

@@ -1,13 +1,12 @@
 ﻿using RsWiki.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RsWiki.Farming.StageParsers
 {
     public class CropInfoBuilder
     {
-        public string Crop { get; }
-
         public int Stages { get; }
 
         public string PatchType { get; }
@@ -18,15 +17,14 @@ namespace RsWiki.Farming.StageParsers
 
         public CropInfoBuilder(string crop, int stages, string patchType, GrowthStages supportedStages)
         {
-            Crop = crop.ToLower();
             Stages = stages;
             PatchType = patchType.ToLower();
             SupportedStages = supportedStages;
 
-            m_parser = ParserFactory.CreateParser(PatchType, stages);
+            m_parser = ParserFactory.CreateParser(PatchType, stages, crop.ToLower());
         }
 
-        public IReadOnlyCollection<CropStageInfo> Build()
+        public CropStageCollection Build()
         {
             var stages = Enum.GetValues<GrowthStages>();
             var cropInfo = new List<CropStageInfo>();
@@ -37,17 +35,18 @@ namespace RsWiki.Farming.StageParsers
                 {
                     if (SupportedStages.HasFlag(state))
                     {
-                        var template = m_parser.GetCropInfo(state, i, Crop);
+                        var mutatedState = m_parser.MutateState(state, i);
+                        var template = m_parser.GetCropInfo(mutatedState, i);
 
                         if (template != null)
                         {
-                            cropInfo.Add(new CropStageInfo(state, i, template.CapitaliseFirstLetter()));
+                            cropInfo.Add(new CropStageInfo(mutatedState, i, template.CapitaliseFirstLetter()));
                         }
                     }
                 }
             }
 
-            return cropInfo;
+            return new CropStageCollection(cropInfo);
         }
     }
 }

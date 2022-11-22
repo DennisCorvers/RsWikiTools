@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RsWiki.Farming;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -21,7 +23,16 @@ namespace GrowthStageTemplates
                 .OrderBy(x => x.CreationTime)
                 .GetEnumerator();
 
-            var crops = cropFileInfo.CropStages.GetEnumerator();
+            ICollection<CropStageInfo> orderedCrops = new List<CropStageInfo>();
+            cropFileInfo.CropStages
+                .AppendCollection(orderedCrops, GrowthStages.Healthy)
+                .AppendCollection(orderedCrops, GrowthStages.Produce)
+                .AppendCollection(orderedCrops, GrowthStages.Grown)
+                .AppendCollection(orderedCrops, GrowthStages.Watered)
+                .AppendCollection(orderedCrops, GrowthStages.Diseased)
+                .AppendCollection(orderedCrops, GrowthStages.Dead);
+
+            var crops = orderedCrops.GetEnumerator();
 
             while (files.MoveNext() && crops.MoveNext())
             {

@@ -2,9 +2,10 @@
 {
     internal class FlowerParser : DefaultParser
     {
-        public FlowerParser(int stages)
-            : base(stages)
-        { }
+        public FlowerParser(string crop, int stages) 
+            : base(crop, stages)
+        {
+        }
 
         protected override bool StageExists(GrowthStages state, int stage)
         {

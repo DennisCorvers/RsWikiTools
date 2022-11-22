@@ -5,12 +5,11 @@ namespace RsWiki.Farming
     [Flags]
     public enum GrowthStages
     {
-        None = 0,
-        Seed = 1,
-        Healthy = 2,
-        Watered = 4,
-        Diseased = 8,
-        Dead = 16,
-        Grown = 32
+        Healthy = 1,
+        Watered = 2,
+        Diseased = 4,
+        Dead = 8,
+        Grown = 16,
+        Produce = 32
     }
 }
