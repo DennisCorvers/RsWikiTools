@@ -61,12 +61,13 @@ namespace GrowthStageTemplates
                 return null;
 
             var prms = line.Split(',');
-            if (prms.Length < 2)
-                throw new ArgumentException("Input requires at least a crop name (string) and an amount of stages (number)");
+            if (prms.Length < 3)
+                throw new ArgumentException("Input requires at least a crop name (string), an amount of stages (number) and a patch type (string)");
 
             var cropName = prms[0].Trim();
             var stages = int.Parse(prms[1]);
-            var patch = prms.Length > 2 ? prms[2].Trim().ToLower() : string.Empty;
+            var patch = prms[2].Trim().ToLower();
+            var produce = prms.Length > 3 ? int.Parse(prms[3]) : -1;
 
             // Default growth stages.
             var supportedStages =
@@ -75,7 +76,11 @@ namespace GrowthStageTemplates
                 GrowthStages.Diseased |
                 GrowthStages.Dead;
 
-            var cropInfoBuilder = new CropInfoBuilder(cropName, stages, patch, supportedStages);
+            var config = prms.Length > 3
+                ? new ProduceParserConfig(cropName, stages, produce)
+                : new ParserConfig(cropName, stages);
+
+            var cropInfoBuilder = new CropInfoBuilder(config, patch, supportedStages);
             return new CropFileInfo(ImageFormat, cropName, cropInfoBuilder.Build());
         }
     }

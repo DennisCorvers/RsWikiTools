@@ -8,10 +8,10 @@ namespace RsWiki.Farming.StageParsers
 
         protected string Crop { get; }
 
-        public DefaultParser(string crop, int stages)
+        public DefaultParser(ParserConfig config)
         {
-            Stages = stages;
-            Crop = crop;
+            Stages = config.Stages;
+            Crop = config.Crop;
         }
 
         public string GetCropInfo(GrowthStages state, int stage)

@@ -2,8 +2,8 @@
 {
     internal class NonWaterParser : DefaultParser
     {
-        public NonWaterParser(string crop, int stages) 
-            : base(crop, stages)
+        public NonWaterParser(ParserConfig config) 
+            : base(config)
         {
         }
 

@@ -2,8 +2,8 @@
 {
     internal class FlowerParser : DefaultParser
     {
-        public FlowerParser(string crop, int stages) 
-            : base(crop, stages)
+        public FlowerParser(ParserConfig config) 
+            : base(config)
         {
         }
 

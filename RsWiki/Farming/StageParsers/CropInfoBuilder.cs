@@ -15,13 +15,13 @@ namespace RsWiki.Farming.StageParsers
 
         private readonly DefaultParser m_parser;
 
-        public CropInfoBuilder(string crop, int stages, string patchType, GrowthStages supportedStages)
+        public CropInfoBuilder(ParserConfig config, string patchType, GrowthStages supportedStages)
         {
-            Stages = stages;
+            Stages = config.Stages;
             PatchType = patchType.ToLower();
             SupportedStages = supportedStages;
 
-            m_parser = ParserFactory.CreateParser(PatchType, stages, crop.ToLower());
+            m_parser = ParserFactory.CreateParser(PatchType, config);
         }
 
         public CropStageCollection Build()
